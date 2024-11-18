@@ -156,13 +156,6 @@ Run the following command to execute the test suite:
 ```bash
 python manage.py test
 ```
-
----
-
-## Postman Collection
-
-A comprehensive Postman collection with all API endpoints is available. You can download it [here](<postman_collection_url>).
-
 ---
 
 ## Future Improvements
