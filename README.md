@@ -30,8 +30,7 @@ Follow these steps to set up the application locally:
 ### 1. Clone the repository
 
 ```bash
-git clone <repository_url>
-cd <repository_directory>
+git clone https://github.com/Chelakhovl/the-Spy-Cat-Agency.git
 ```
 
 ### 2. Set up a virtual environment
