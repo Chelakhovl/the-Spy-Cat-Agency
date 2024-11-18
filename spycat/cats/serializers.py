@@ -16,7 +16,14 @@ class SpyCatSerializer(serializers.ModelSerializer):
         """
         Validates that the provided breed exists in TheCatAPI.
         """
-        response = requests.get(f"{settings.THE_CAT_API_URL}?q={value}")
-        if not response.json():
+        response = requests.get(f"{settings.THE_CAT_API_URL}")
+        if response.status_code != 200:
+            raise serializers.ValidationError("Unable to validate breed at this time.")
+
+        breeds = response.json()
+        breed_names = [breed['name'] for breed in breeds]
+
+        if value not in breed_names:
             raise serializers.ValidationError("Invalid breed. Please provide a valid cat breed.")
+
         return value

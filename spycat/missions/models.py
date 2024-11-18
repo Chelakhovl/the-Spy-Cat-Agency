@@ -1,7 +1,6 @@
 from django.db import models
 from cats.models import Cats
 
-
 class Mission(models.Model):
     """
     Represents a spy mission assigned to a specific cat.
@@ -61,7 +60,10 @@ class Target(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        if self.pk and self.is_completed and 'is_completed' not in kwargs.get('update_fields', []):
+        """
+        Save method prevents updating a completed target unless explicitly updating its completion status.
+        """
+        if self.is_completed and 'update_fields' not in kwargs:
             raise ValueError("Cannot update a completed target.")
         super().save(*args, **kwargs)
 
