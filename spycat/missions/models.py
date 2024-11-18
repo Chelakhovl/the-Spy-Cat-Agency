@@ -61,10 +61,7 @@ class Target(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        """
-        Overrides the save method to prevent updates to completed targets.
-        """
-        if self.is_completed:
+        if self.pk and self.is_completed and 'is_completed' not in kwargs.get('update_fields', []):
             raise ValueError("Cannot update a completed target.")
         super().save(*args, **kwargs)
 

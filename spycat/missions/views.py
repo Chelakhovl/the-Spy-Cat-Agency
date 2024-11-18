@@ -35,7 +35,7 @@ class MissionViewSet(viewsets.ModelViewSet):
         Prevents deletion of a mission if a spy cat is assigned.
         """
         mission = self.get_object()
-        if mission.spy_cat:
+        if mission.cat:
             return Response(
                 {"error": "Cannot delete a mission assigned to a spy cat."},
                 status=status.HTTP_400_BAD_REQUEST

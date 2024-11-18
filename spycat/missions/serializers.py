@@ -43,7 +43,7 @@ class MissionSerializer(serializers.ModelSerializer):
         """
         Validates that a mission cannot be updated if it has an assigned spy cat.
         """
-        if self.instance and self.instance.spy_cat:
+        if self.instance and self.instance.cat:
             raise serializers.ValidationError("Cannot modify a mission assigned to a spy cat.")
         return data
 
