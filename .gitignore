@@ -1,0 +1,45 @@
+# Python specific
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.swp
+*.swo
+.Python
+
+# Environment
+.env
+myenv/
+venv/
+env/
+ENV/
+
+# Django specific
+db.sqlite3
+*.log
+staticfiles/
+media/
+local_settings.py
+
+# Migrations
+*/migrations/*.py
+!*/migrations/__init__.py
+
+# IDE specific
+.idea/
+.vscode/
+*.iml
+
+# Operating system specific
+.DS_Store
+Thumbs.db
+
+# Test and coverage reports
+htmlcov/
+.tox/
+.coverage
+*.cover
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.log
