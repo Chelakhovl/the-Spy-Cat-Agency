@@ -9,28 +9,59 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('cats', '0001_initial'),
+        ("cats", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Mission',
+            name="Mission",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('status', models.BooleanField(default=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('cat', models.OneToOneField(blank=True, null=True, on_delete=django.db.models.deletion.SET_NULL, to='cats.cats')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("status", models.BooleanField(default=False)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                (
+                    "cat",
+                    models.OneToOneField(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.SET_NULL,
+                        to="cats.cats",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Target',
+            name="Target",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=200)),
-                ('country', models.CharField(max_length=100)),
-                ('notes', models.TextField(blank=True, null=True)),
-                ('is_completed', models.BooleanField(default=False)),
-                ('mission', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='targets', to='missions.mission')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=200)),
+                ("country", models.CharField(max_length=100)),
+                ("notes", models.TextField(blank=True, null=True)),
+                ("is_completed", models.BooleanField(default=False)),
+                (
+                    "mission",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="targets",
+                        to="missions.mission",
+                    ),
+                ),
             ],
         ),
     ]

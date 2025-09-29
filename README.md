@@ -51,10 +51,17 @@ pip install -r requirements.txt
 Create a `.env` file in the project root with the following content:
 
 ```
-DEBUG=True
-SECRET_KEY=<your_django_secret_key>
-DATABASE_URL=postgres://<user>:<password>@<host>:<port>/<database>
-THE_CAT_API_URL=https://api.thecatapi.com/v1/breeds/search
+SECRET_KEY=your_secret_key_here
+
+DB_ENGINE=django.db.backends.postgresql
+DB_NAME=your_db_name
+DB_USER=your_db_user
+DB_PASSWORD=your_db_password
+DB_HOST=localhost
+DB_PORT=5432
+
+THE_CAT_API_URL=https://api.thecatapi.com/v1/breeds
+
 ```
 
 ### 5. Set up the database

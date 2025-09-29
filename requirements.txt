@@ -4,4 +4,6 @@ djangorestframework==3.14.0
 requests==2.31.0
 psycopg2==2.9.6
 python-decouple==3.8
+black==23.7.0
+flake8==6.1.0
 

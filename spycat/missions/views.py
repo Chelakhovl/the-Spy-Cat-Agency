@@ -3,49 +3,58 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from .models import Mission, Target
 from .serializers import MissionSerializer, TargetSerializer
+from .services import (
+    complete_target,
+    delete_mission_if_no_cat,
+    mark_mission_completed_if_all_targets_done,
+)
 
 
 class MissionViewSet(viewsets.ModelViewSet):
-    """
-    A viewset for handling CRUD operations for missions.
-    Includes custom actions for completing targets and restricting deletion of missions with assigned spy cats.
-    """
     queryset = Mission.objects.all()
     serializer_class = MissionSerializer
 
-    @action(detail=True, methods=['patch'])
+    @action(detail=True, methods=["patch"])
     def complete_target(self, request, pk=None):
         """
         Marks a specific target as completed.
         """
-        target_id = request.data.get('target_id')
+        target_id = request.data.get("target_id")
         if not target_id:
-            return Response({"error": "Target ID is required."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"error": "Target ID is required."}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         try:
-            target = Target.objects.get(pk=target_id, mission_id=pk)
-            target.is_completed = True
-            target.save()
-            return Response({"message": f"Target '{target.title}' marked as completed."})
-        except Target.DoesNotExist:
-            return Response({"error": "Target not found."}, status=status.HTTP_404_NOT_FOUND)
+            target = complete_target(pk, target_id)
+            mark_mission_completed_if_all_targets_done(target.mission)
+            return Response(
+                {"message": f"Target '{target.title}' marked as completed."}
+            )
+        except Exception:
+            return Response(
+                {"error": "Target not found."}, status=status.HTTP_404_NOT_FOUND
+            )
 
     def destroy(self, request, *args, **kwargs):
         """
         Prevents deletion of a mission if a spy cat is assigned.
         """
         mission = self.get_object()
-        if mission.cat:
+        if not delete_mission_if_no_cat(mission):
             return Response(
                 {"error": "Cannot delete a mission assigned to a spy cat."},
-                status=status.HTTP_400_BAD_REQUEST
+                status=status.HTTP_400_BAD_REQUEST,
             )
-        return super().destroy(request, *args, **kwargs)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class TargetViewSet(viewsets.ModelViewSet):
-    """
-    A viewset for handling CRUD operations for targets.
-    """
     queryset = Target.objects.all()
     serializer_class = TargetSerializer
+
+    def create(self, request, *args, **kwargs):
+        return Response(
+            {"error": "Targets can only be created through a mission."},
+            status=status.HTTP_405_METHOD_NOT_ALLOWED,
+        )

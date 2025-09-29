@@ -1,0 +1,65 @@
+name: Django CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_DB: spycat
+          POSTGRES_USER: spycat_user
+          POSTGRES_PASSWORD: spycat_password
+        ports:
+          - "5432:5432"
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    env:
+      DB_NAME: spycat
+      DB_USER: spycat_user
+      DB_PASSWORD: spycat_password
+      DB_HOST: localhost
+      DB_PORT: 5432
+      THE_CAT_API_URL: https://api.thecatapi.com/v1/breeds
+      SECRET_KEY: testsecretkey
+
+    steps:
+      
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+     
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install black
+
+      
+      - name: Run Black
+        run: black --check .
+
+      
+      - name: Run migrations
+        run: python manage.py migrate
+
+      
+      - name: Run tests
+        run: python manage.py test
